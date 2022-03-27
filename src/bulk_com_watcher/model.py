@@ -11,10 +11,16 @@ class Offer(BaseModel):
     price_currency: str = Field(..., alias="priceCurrency")
     url: str
     sku: str
-    availability: str
+    availability: str  # InStock, OutOfStock
     image: str
     price_valid_until: str = Field(..., alias="priceValidUntil")
     gtin: str
+
+    @property
+    def price_per_gram(self) -> float:
+        s: list[str] = self.sku.split("-")
+        grams = float(s[-1])
+        return self.price / grams
 
 
 class Model(BaseModel):
